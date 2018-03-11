@@ -1,0 +1,512 @@
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{upeeei}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\synctex=-1
+\usepackage{babel}
+\begin{document}
+%% UP EEEI undergraduate project proposal template
+%% adapted from the
+%% UP EEEI undergraduate project template
+%% v0.1 by Louis P. Alarcon 11/22/2011
+%%
+%% LyX template - use with the following files:
+%% 	uct10_new.clo, uct11_new.clo, uct12_new.clo, upeeei.cls, upeeei.layout
+%%
+%% Place project title here
+\title{Per-packet Multipath TCP with Reorder Resilience in Datacenter Networks} 
+
+%%
+%% Author information
+
+\author{
+Charles Joshua Alba\\ 2013-06878\\ \emph{B.S. Computer Engineering} \and 
+Kyle Gomez\\ 2013-25650\\ \emph{B.S. Computer Engineering} \and
+Rene Josiah M. Quinto\\ 2013-14854\\ \emph{B.S. Computer Engineering} \and
+}
+
+%%
+%% Month and year of submission/graduation
+\degreeyear{2017} 
+\degreesemester{November} 
+
+% Put your advisers here:
+\chair{Professor Roel Ocampo}
+\othermembers{Professor Isabel Montes} 
+\numberofmembers{1} 
+
+\field{Computer Engineering} 
+\campus{Diliman} 
+
+\maketitle 
+
+\begin{abstract} 
+
+%Your abstract goes here...
+In a \emph{single} well-written paragraph, this is what we'd like to do.  Try to cover Need, Solution, Differentiation, Benefit (NSDB).  Use the content of this template as an example for formatting your proposal document, \textbf{NOT} as a strict guide for the flow of your discussion and what your proposal must contain.
+
+\abstractsignature\end{abstract}
+
+\begin{frontmatter} 
+
+\setlength{\parskip}{0pt}
+
+\tableofcontents{}
+
+\listoffigures
+
+\listoftables
+
+\end{frontmatter} 
+
+\def\MASTERDOC{true}
+
+\cleardoublepage{}
+
+\chapter{Introduction\label{cha:Introduction}}
+
+\section{Servicing Increasing Demand with Datacenter Networks}
+
+Several companies and institutions (Google, Amazon, and Microsoft,
+to name a few) provide a wide variety of online services such as video
+streaming, online gaming, VoIP, file sharing, and simple web searching.
+These online services usually differ in their workload profiles \cite{geng2016juggler,he2008toward}\textemdash faster
+connections result to better performance for file sharing services,
+while connection stability is the main concern for video streaming
+services.
+
+The demand for online services has been increasing steadily due to
+their popularity. Moreover, the competitive market have pushed for
+innovations to improve services, resulting in increased computational
+load \cite{barroso2013datacenter}. To keep up with demand that increases
+in both quantity and complexity, companies need to expand and upgrade
+their resources, increasing costs \cite{wilson2011better,decandia2007dynamo}.
+One way to meet this demand is to distribute service requests to multiple
+servers, then aggregating responses to form the final result (also
+known as the partition/aggregate design pattern) \cite{alizadeh2010data}.
+Infrastructures built with this demand distribution property are called
+datacenter networks or DCNs.
+
+Apart from meeting the increasing demand, this provides several benefits.
+Firstly, by having redundant servers, services can be maintained even
+during partial network maintenance \cite{barroso2013datacenter}.
+Secondly, an organized and redundant network infrastructure eases
+management \cite{barroso2013datacenter}. Finally, distributing requests
+to different servers increases server utilization, proving to be more
+cost-effective and scalable \cite{greenberg2008cost}. 
+
+\section{Nature and Topology of Datacenter Networks }
+
+Partitioned requests are distributed among servers within a datacenter
+(end-hosts) through packet streams (flows). Since majority of the
+flows stay within a datacenter \cite{benson2010network}, the network
+topology must guarantee a speedy and reliable connection between local
+end-hosts. These properties can be characterized with sufficient interconnection
+bandwidth \cite{al2010hedera,al2008scalable} and fault-tolerance
+\cite{niranjan2009portland}. 
+
+Requests must be serviced quickly and aggregated back to the user,
+which means that the server response delays also add up and affect
+the performance of the service \cite{alizadeh2010data}. End-hosts
+also need to keep their internal data structures fresh \cite{alizadeh2010data}
+through frequent large transfers of data. Therefore, datacenters must
+also guarantee low latency for short flows, and high throughput to
+service large flows \cite{alizadeh2010data,he2008toward}.
+
+Current datacenter network topologies guarantee the previous characteristics
+through different approaches. Switch-centric topologies \cite{al2008scalable,leiserson1985fat}
+rely solely on switches and routers to forward traffic across the
+network, which ensures speedy delivery due to specialized hardware
+at the expense of scalability. Server-centric topologies \cite{guo2008dcell,guo2009bcube}
+allow servers to forward packets as well, however software routing
+may be slow and can affect host-based applications \cite{lebiednik2016survey}.
+
+Topologies can be also designed to be modular \cite{guo2009bcube}or
+hierarchical \cite{leiserson1985fat} to increase network capacity
+through scalability \cite{al2010hedera}. This introduces multiple
+redundant links and paths between servers within the network, establishing
+a connection-rich nature \cite{he2008toward,rost2003rate}. 
+
+\section{Better Network Utilization through Multiple Paths}
+
+Host-to-host connectivity within a datacenter was originally facilitated
+using the Transmission Control Protocol (TCP) \cite{alizadeh2010data,raiciu2011improving}.
+TCP ensures robustness in the delivery of packets between end-hosts
+in the presence of communication unreliability \cite{postel1981transmission}.
+
+TCP connections make use of a single network path between end-hosts
+\cite{kurose2005computer}. Since it is typical for two end-hosts
+in a datacenter network to have multiple paths, TCP is unable to fully
+utilize the available paths between end hosts \cite{ford2011architectural},
+and may not be able to achieve optimal network utilization.
+
+To make use of the available resources in a path-diverse network,
+Multipath TCP (MPTCP) was proposed as an experimental protocol by
+the IETF. MPTCP uses parallel TCP connections \cite{ford2013tcp,fordmptcpslides},
+which increases throughput and resiliency of the network \cite{ford2011architectural}.
+
+\cleardoublepage{}
+
+\chapter{Related Work\label{cha:RRW}}
+
+\section{Multipath TCP with Short Flows }
+
+Multipath TCP, being designed as an extension for TCP \cite{ford2013tcp},
+inherits its congestion control mechanisms. One of which is Slow Start
+{[}62{]}, where each subflow starts sending a limited amount of packets,
+then exponentially increases its sending rate until a link capacity/threshold
+is reached. Exceeding link capacity can result to packet loss due
+to switch overflows, making the receiver fail to acknowledge the packet.
+This subsequent action will cause the sender to retransmit the packet
+due to its internal retransmission timeout, or due to receiving three
+duplicate acknowledgements (TCP Fast Retransmit) for a previously
+sent packet, in addition to reducing the sending rate of the sender.
+
+Since majority of the flows on a datacenter are short flows {[}49{]}
+and are of a bursty nature \cite{alizadeh2010data}, MPTCP would cause
+these flows to stay in the Slow Start phase {[}88{]}, where the sending
+rate is initially limited, then is increased drastically. Therefore,
+when short flows lose packets due to congestion, retransmission is
+necessary, and this increases the flow completion time {[}73{]}. 
+
+In addition, MPTCP also inherits TCP's handshake protocol, in order
+to create and establish subflows between end-hosts. Since MPTCP cannot
+discern between short and long flows, it cannot decide as to how many
+subflows should be established to optimally send packets across the
+network. Therefore, a mismatch in the number of subflows, specifically
+for short flows would further increase the flow completion time due
+to the extra packets required to establish a connection. 
+
+To minimize the flow completion time for short flows, connections
+can start by spraying packets over multiple paths. Connections then
+can switch back to MPTCP upon reaching a certain amount of packets
+{[}73{]}, to make use of MPTCP's benefits over long flows such as
+increased throughput and better congestion control. However, the introduction
+of packet spraying in addition to using MPTCP would open this specific
+implementation to both problems associated with each. 
+
+\section{Multipath TCP with Duplicated Retransmissions }
+
+Multipath TCP uses Equal-Cost Multipath (ECMP), a switch-based algorithm,
+to forward packets through the network \cite{raiciu2011improving}.
+ECMP bases its forwarding on a 5-tuple (source IP, destination IP,
+source port, destination port, protocol number) {[}32{]} which is
+hashed and used to forward packets to paths. This means that all data
+belonging to one subflow will strictly follow one network path. Selected
+network paths by ECMP may traverse links that have already been chosen
+by another subflow, which will effectively decrease the maximum available
+capacity of the link. Areas in the network that are close to exceeding
+link capacity are called hotspots. Colliding subflows may exceed the
+link capacity for any given link in a datacenter network, resulting
+in full switch queues. Full switch queues will then lead to dropped
+packets, which in turn, decrease mean network utilization {[}i{]}.
+
+Duplicating packets across multiple paths (bicasting) in an MPTCP
+connection can be used to mitigate the decrease in throughput due
+to dropped packets {[}82{]}. In full bicasting, each connection transmits
+a copy of all packets sent across multiple subflows, while selective
+bicasting only duplicates packets that are sent as a retransmission
+of lost packets. 
+
+However, the increase in throughput for individual subflows brought
+about in both full and selective bicasting may not be optimal in a
+datacenter. This is, in part, attributed to the duplicating nature
+of bicasting wherein redundant data is sent through the network\textquoteright s
+links and consumes resources for other subflows. In addition to redundant
+data packets, control packets such as the ACK packets in TCP add to
+network traffic. This added traffic to the network can be perceived
+as a loss in throughput.
+
+\section{Multipath TCP with Packet Spraying }
+
+As previously mentioned, network hotspots create areas of congestion
+in the DCN, throttling the throughput of the connections that pass
+through these hotspots. One way to avoid this is to use packet spraying
+{[}74{]}. Packet spraying spreads a sequence of packets through different
+candidate ports instead of forwarding packets of a single flow through
+a chosen port according to its hashed flow identifier as seen in ECMP.
+This scheme prevents the collision of multiple paths onto specific
+links (hash collision), and spreads the packets in the hopes of evenly
+distributing the load through all relevant links of the network. 
+
+However, distributing packets of a flow into different paths can lead
+to out-of-order packets if the paths have significantly different
+end-to-end delays {[}74{]}. End-hosts receiving packets that do not
+arrive in the order that they were sent may falsely perceive that
+the network is lossy and request for retransmissions \cite{postel1981transmission}.
+The sending end-host will receive these retransmission requests and
+will falsely perceive that there is congestion in the network, cutting
+the congestion window in half which will then result in the reduction
+of throughput. 
+
+One way to avoid false congestion due to packet reordering is to adjust
+the time threshold of the end-hosts before they request for retransmission
+{[}73{]}, effectively making end-hosts more tolerant to delays in
+the network. However, an improper configuration (mismatch) of this
+threshold will result in an increased delay before sending retransmission
+requests in actual congestion experienced in the network, greatly
+decreasing the flow completion time and penalizing short flows. 
+
+To increase the resiliency of the end-hosts against out-of-order packets
+while avoiding a threshold mismatch, one solution would be to increase
+the buffer size of the Generic Receive Offload (GRO) layer of the
+end-hosts {[}67{]}. The GRO layer works underneath the transport layer,
+and is responsible for bundling packets to decrease computational
+overhead versus individual per-packet processing. Increasing the buffer
+size enables it to accept packets that arrive earlier than those preceding
+it thereby increasing its resilience towards out-of-order packets.
+This is based on the assumption that, in a datacenter, delay differences
+between paths are significantly less than in non-datacenter networks. 
+
+\section{Multipath TCP with a Global Network View }
+
+With Software Defined Networking (SDN), a global view of the network
+state can be provided to a central controller {[}18, 19, 20{]}. This
+enables network protocols to make use of global network information,
+such as link utilization and end-to-end delays {[}80, 84{]}, to create
+more informed decisions. SDN approaches have introduced several benefits,
+such as increased throughput and network resiliency, by controlling
+the number of subflows and scheduling the routes of different connections
+to avoid both network hotspots and out-of-order packets {[}80{]}. 
+
+These benefits, however, comes at the price of controller overhead
+{[}80{]}. SDN controllers need to communicate regularly with the network
+switches in order to issue forwarding rules to adapt with the situation,
+causing delays. Since most congestion events that happen in DCNs is
+because of traffic bursts that only lasts for a few microseconds (microbursts)
+{[}66{]}, controller overhead becomes significant, and so SDN implementations
+cannot respond fast enough. Due to controller overhead, SDN implementations
+can also increase the flow completion time of connections, penalizing
+short flows. Moreover, SDN implementations generally do not scale
+with a large number of connections as the controller overhead also
+increases with the number of active connections {[}80{]}. 
+
+\cleardoublepage{}
+
+\chapter{Problem Statement and Objectives \label{cha:ProbStatement}}
+
+\section{Problem Statement}
+
+Common topologies in datacenter networks exhibit symmetry and path
+diversity {[}c{]}. This ensures that multiple paths of equal costs
+exist between two end-hosts {[}74{]}. In addition, an ideal datacenter
+network must guarantee high throughput for large flows, and low latency
+for short flows \cite{alizadeh2010data}{[}b, c{]}.
+
+Multipath TCP, an experimental protocol by the IETF, is a TCP extension
+that uses multiple paths over many connections \cite{ford2013tcp}.
+By using multiple paths simultaneously, MPTCP aims to increase network
+utilization, specifically throughput, and increase \textquotedbl{}resilience
+of connectivity\textquotedbl{} \cite{fordmptcpslides}. This is done
+by employing Equal Cost Multi-Path (ECMP) \cite{raiciu2011improving},
+a switch-based forwarding algorithm. ECMP hashes subflows into separate
+paths using the packet's header information. However, hotspots in
+the network may occur when flows are hashed to paths with one or more
+links overlapping with each other {[}i{]}, usually exceeding the link
+capacity. Because of this, the network experiences a drop in network
+utilization due to sender backoff {[}74{]}. 
+
+Random packet spraying, an alternative to ECMP, can be used to resolve
+hotspots as it allows for a greater granularity for load balancing
+{[}c{]}. However, this can result in reordered packets at the receiver,
+triggering false retransmissions upon receipt of three duplicated
+packet acknowledgements \cite{ford2011architectural}, in addition
+to drastically reducing sender throughput {[}83{]}. This can be minimized
+by dynamically changing the retransmission threshold. However, a positive
+mismatch on the threshold may mean a slower response time for actual
+packet drops {[}83{]}. 
+
+Minimizing retransmission due to out-of-order packets can be done
+by supplementing the function of the Generic Receive Offload (GRO)
+layer to fix the order of packets \cite{geng2016juggler} in addition
+to merging packets together. This not only reduces computational overhead
+compared to per-packet processing, but makes the end-hosts more tolerant
+to packet reordering, and thus reduces retransmissions. However, reordered
+packets must arrive within a short delay of each other since the switch
+queues are limited and timeouts are smaller. 
+
+Also, to maintain backwards compatibility with TCP, MPTCP also suffers
+from the complexity in connection establishment {[}74{]} and slow
+start {[}62{]}, which in turn penalizes short flows through higher
+flow completion times. To maintain lower flow completion times and
+lower latency for short flows, a specified amount of packets are sprayed
+through multiple paths initially before switching to MPTCP {[}73{]}.
+However, this means that it inherits problems from both implementations
+altogether. 
+
+Better network utilization can be also achieved using Software-Defined
+Networking {[}80, 84{]}. With a global view of the network, it can
+better utilize path diversity, have a better gauge on the number of
+subflows per connection, and ideally minimize the receipt of out-of-order
+packets. This solution benefits large data flows, but due to the added
+controller overhead, it may penalize short flows. In addition, it
+may also have some scalability issues {[}84{]}. 
+
+To combat delay and lower throughput caused by multiple timeouts on
+wireless networks, retransmission redundancy was implemented using
+full and partial bicasting over MPTCP {[}82{]}. This may not necessarily
+be effective in the datacenter setup as redundant packets may cause
+more false retransmissions. 
+
+We hypothesize that an increase in overall throughput and network
+utilization in MPTCP can be achieved through implementing packet spraying
+in the network instead of ECMP. In addition, creating reorder-resilient
+end hosts will combat the negative effects of packet spraying such
+as decreased throughput. By comparing the results we see from different
+experiments, we strengthen the basis for considering a reorder-resilient
+network for future datacenter networks, as well as potentially contribute
+to the growth of MPTCP as an experimental protocol. 
+
+\section{Objectives}
+
+The general objectives of this work are as follows. A simulation/emulation
+of the chosen network topology will be created to model traffic in
+a datacenter. Baseline measurements of the network performance, specifically
+in terms of throughput, will be obtained for comparison later on.
+MPTCP will be configured on the network and performance will again
+be measured. The following will then be added incrementally onto the
+MPTCP-configured network: packet spraying, Generic Receive Offload
+(GRO) editing. Finally, a comparison of all the configurations will
+be done to determine which is most effective in terms of our chosen
+metric-throughput.
+
+\cleardoublepage{}
+
+\chapter{Preliminary Findings\label{cha:Prelims}}
+
+Considering that Multipath TCP penalizes short flows due to unnecessary
+overhead due to connection complexity, as well as creates hotspots
+due to ECMP routing, the metrics to be observed should be flow completion
+time, and end-host throughput, for short and long flows accordingly,
+in addition to mean network utilization. 
+
+To characterize the behavior of the routing protocol, the end-hosts,
+and the network, we execute a number of tests varying different parameters
+related to each. The control group would have end-hosts running TCP
+without any kernel or network stack modifications. 
+
+\section{Behavioral Considerations }
+
+MPTCP is available as an ns-3 model {[}{]} or a kernel patch {[}{]}.
+Juggler {[}{]}, which modifies the GRO function to fix packet ordering,
+is only readily available as a kernel patch. Preference is then given
+to kernel patches, assuming that there are little to no conflicts
+between both MPTCP and Juggler.
+
+Switches, on the other hand, can be described with its normal forwarding
+algorithm, which stores only one next-hop for all destinations in
+its routing table. However, the switches must also be capable of Equal
+Cost Multi-Path (ECMP), and Packet Spraying, which require a routing
+table storing multiple next-hops. In consideration, the switch must
+be capable of the three previously described algorithms, with preference
+to easier switch customization. 
+
+\section{Setting Up the Test Environment}
+
+Initially, three separate testbeds were created using Ubuntu 16.04.3
+with a Linux kernel version of 4.10.0-28-generic. Mininet was chosen
+as the network emulator due to the researcher's comfortability with
+Python scripting, in addition to prior Mininet experience. 
+
+Since Mininet uses the host OS to emulate hosts and switches, only
+the host OS of the testbench needs kernel preconfiguration. MPTCP
+v0.93 was then used by patching the kernel of the testbeds. 
+
+We based our testing topology from an MPTCP laboratory experiment
+from an SDN class available online {[}{]}. Because we only considered
+a very simple topology for preliminary work, we made do with using
+a host as a router by configuring it to be able to forward packets. 
+
+\section{Managing Multipath TCP Subflows}
+
+Multipath TCP handles the discovery, setup, and termination of subflows
+through the heuristics of a path manager \cite{postel1981transmission}.
+We consider three of the four available path managers MPTCP provides
+{[}{]}. 
+
+First the default path manager does not initiate nor announce different
+IP addresses, but will still still accept subflows from end-hosts
+that do. Next, fullmesh creates flows using all combinations of interfaces
+between hosts (i.e. two end-hosts with two interfaces each will have
+4 subflows). Finally, Ndiff allows the control over the number of
+subflows in a connection through the use of different ports.
+
+\cleardoublepage{}
+
+\chapter{Methodology\label{cha:Methodology}}
+
+To determine the effects of implementing MPTCP and packet spraying
+in the network, we will create as an initial testing point a mininet
+network with MPTCP enabled, packet spraying as the packet forwarding
+protocol used in the switches of the network, and Juggler configured
+on the end-hosts in mininet. Other network setups with incremental
+changes in the network stack will be created to be used as points
+of comparison. 
+
+Each setup will be put through different characterization tests for
+comparison. The throughput between two-hosts will then be measured
+to determine whether or not hotspots were present in the network during
+traffic simulations. Flow completion will also be measured to determine
+the effects of the creation of subflows on short-lived flows. Finally,
+mean network utilization will be measured to determine the degree
+to which the available resources is used. 
+
+\section{Setup of Testing Environment}
+
+Due to the Juggler-required custom-compiled kernel, we will use mininet
+as mininet uses the host\textquoteright s kernel for simulating the
+end-hosts. This was in addition to the previously mentioned researcher
+preference to mininet\textquoteright s Python API. Based off preliminary
+work done, Ubuntu 16.04.3 with kernel version 4.10.0.28-generic will
+be used as the base distribution for tests. 
+
+To enable incremental measurement of changes done to the network stack,
+multiple linux kernels will be edited and compiled for use. One with
+Juggler and MPTCP enabled, another with just Juggler, and finally
+one with just MPTCP. 
+
+\section{Data Gathering}
+
+Network performance tools will be created to properly gauge the throughput,
+flow completion time, and mean network utilization. The different
+network setups will then be evaluated using the measured performance
+metrics. 
+
+Initially, TCP in a fat-tree topology will be measured to be used
+as a baseline for all other network setups. MPTCP and its three variants
+will then be tested after. Subsequent tests will then be done with
+packet spraying and juggler in all possible combinations. 
+
+\cleardoublepage{}
+
+\chapter{Project Schedule and Deliverables\label{cha:Project-Sked}}
+
+\section{Halfway Point Deliverables}
+
+The following are the deliverables for the project halfway point: 
+\begin{itemize}
+\item Create a scalable datacenter network (fat-tree) topology on mininet 
+\item Create experiment testbed, equipped with metric tools 
+\item Implement ECMP on switches 
+\item Initial simulations with MPTCP vs TCP 
+\end{itemize}
+
+\section{Final Deliverables }
+\begin{itemize}
+\item Implement Packet Spraying on switches 
+\item Integrate JUGGLER to end-host systems 
+\item Do extensive simulations with all possible combinations 
+\end{itemize}
+
+\section{Gantt Charts}
+
+\cleardoublepage{}
+
+\bibliographystyle{ieeetr}
+\bibliography{Proposal_Part1}
+
+\cleardoublepage{}
+\end{document}
