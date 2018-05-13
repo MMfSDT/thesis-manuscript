@@ -202,7 +202,7 @@ emph{B.S.
 
 \begin_layout Plain Layout
 
-Kyle Gomez
+Kyle Dominic Gomez
 \backslash
 
 \backslash
@@ -1430,13 +1430,13 @@ key "fukuyama2016throughput"
 We hypothesize that an increase in overall throughput and network utilization
  in MPTCP can be achieved through implementing packet spraying in the network
  instead of ECMP.
- In addition, creating reorder-resilient end hosts will combat the negative
- effects of packet spraying such as decreased throughput.
+ Since packet spraying can introduce an eventual decrease in throughput,
+ we hypothesize that this can be mitigated by creating reorder-resilient
+ end hosts.
  By comparing the results we see from different experiments, we strengthen
  the basis for considering a reorder-resilient network for future datacenter
  networks, as well as potentially contribute to the growth of MPTCP as an
  experimental protocol.
- 
 \end_layout
 
 \begin_layout Section
@@ -1451,7 +1451,6 @@ The objectives of this work are as follows: First is to experimentally prove
  Lastly, observe and analyze the effects of packet spraying switches, as
  well as reorder-resilient hosts, to minimize network hotspots, and in turn
  benefit both short and large flows.
- 
 \end_layout
 
 \begin_layout Section
@@ -1503,63 +1502,21 @@ name "cha:Methodology"
 \end_layout
 
 \begin_layout Standard
-Considering that Multipath TCP (MPTCP) penalizes short flows due to unnecessary
- overhead due to connection complexity, as well as creates hotspots due
- to ECMP routing, the metrics to be observed should be flow completion time,
- and end-host throughput, for short and large flows respectively.
+Taking into consideration the penalties incurred on short flows from MPTCP
+ connection establishment complexity, as well as the penalties incurred
+ on long flows due to the network hotspots that arise as a consequence of
+ ECMP routing, we chose to measure flow completion time, and end-host throughput
+ and goodput, respectively.
+ Mean network utilization was also measured to gauge the effectivity of
+ each protocol in terms of how well the available network routes were used.
 \end_layout
 
 \begin_layout Standard
-To characterize the behavior of the routing protocol, the end-hosts, and
- the network, we execute a number of tests varying different parameters
- related to each.
- The control group would have end-hosts running TCP without any kernel or
- network stack modifications.
-\end_layout
-
-\begin_layout Section
-Behavioral Considerations 
-\end_layout
-
-\begin_layout Standard
-MPTCP is available as an ns-3 model 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "kheirkhah2014ns3"
-
-\end_inset
-
- or a kernel patch 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "uclouvain2017mptcp"
-
-\end_inset
-
-.
- Juggler 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "geng2016juggler"
-
-\end_inset
-
-, which modifies the GRO function to fix packet ordering, is only readily
- available as a kernel patch.
- Preference is then given to kernel patches, assuming that there are little
- to no conflicts between both MPTCP and Juggler.
-\end_layout
-
-\begin_layout Standard
-Switches, on the other hand, can be described with its normal forwarding
- algorithm, which stores only one next-hop for all destinations in its routing
- table.
- However, the switches must also be capable of Equal Cost Multi-Path (ECMP),
- and Packet Spraying (PS), which require a routing table storing multiple
- next-hops.
- In consideration, the switch must be capable of the three previously described
- algorithms, with preference to easier switch customization.
- 
+To properly attribute each change in the above metrics, several possible
+ permutations of the routing behavior, transport protocol, end-host pairs,
+ and network conditions were tested.
+ These metrics were extracted and compared against each other considering
+ the varying parameters between each test.
 \end_layout
 
 \begin_layout Section
@@ -1567,42 +1524,49 @@ Preliminary Work
 \end_layout
 
 \begin_layout Standard
-To further understand the current implementation of MPTCP on servers, smaller
- tests were used and characterized.
- As the protocol is still in active development, a lot of parameters are
- available to play around it, resulting in different performances.
- Future work might focus on automatically setting these parameters to optimally
- cater to the network activity, completely transparent to the user.
- 
-\end_layout
+Smaller tests using MPTCP were done to further increase the researcher’s
+ understanding of the protocol and its interaction with Mininet.
+ MPTCP was confirmed to be working as indicated in the laboratory experiment
+ of an SDN class 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ke2016mptcplab"
 
-\begin_layout Section
-Setting Up the Test Environment
-\end_layout
+\end_inset
 
-\begin_layout Standard
-Initially, three separate testbeds were created using 
+.
+ An overview of the topology can be found in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Mininet-topology"
+
+\end_inset
+
+.
+ To simplify things, router 
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-Ubuntu 16.04.3
+r2
 \end_layout
 
 \end_inset
 
- with a Linux kernel version of 
-\begin_inset Flex Code
+ is configured to forward packets, acting as a router
+\begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-4.10.0-28-generic
+From this point onwards, we use the terms switch and router interchangeably
+ to mean devices that do layer 2 forwarding and layer 3 routing.
 \end_layout
 
 \end_inset
 
 .
- 
+ All links are capped at a speed of 10 Mbps (i.e., the minimum supported transmiss
+ion rate of both devices connected to the link is 10 Mbps).
 \end_layout
 
 \begin_layout Standard
@@ -1665,57 +1629,15 @@ Mininet topology for MPTCP tests.
 
 \end_layout
 
-\begin_layout Standard
-The preliminary testing topology was based from an MPTCP laboratory experiment
- of an SDN class available online 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "ke2016mptcplab"
-
-\end_inset
-
-.
- An overview of the topology can be found in Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Mininet-topology"
-
-\end_inset
-
-.
- To make things easier, router 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-r2
-\end_layout
-
-\end_inset
-
- is actually a host functioning as a router
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-From this point onwards, we use the terms switch and router interchangeably
- to mean devices that do layer 2 forwarding and layer 3 routing.
-\end_layout
-
-\end_inset
-
- having it preconfigured to forward packets.
- This should be replaced with a configurable router in the actual experimentatio
-n.
-\end_layout
-
-\begin_layout Section
+\begin_layout Subsection
 Managing Multipath TCP Subflows
 \end_layout
 
 \begin_layout Standard
-Multipath TCP handles the discovery, setup, and termination of subflows
- through the heuristics of a path manager 
+In the preliminary setup and tests, it was found that MPTCP can be configured
+ using different parameters.
+ MPTCP handles the discovery, setup, and termination of subflows through
+ the heuristics of a path manager 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "postel1981transmission"
@@ -1723,7 +1645,8 @@ key "postel1981transmission"
 \end_inset
 
 .
- We consider three of the four available path managers MPTCP provides 
+ We considered three of the four available path managers that MPTCP provides
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "uclouvain2017configure"
@@ -1752,7 +1675,6 @@ key "coltun2008rfc"
  number of subflows in a connection through the use of different ports.
  The fourth path manager called binder, isn't considered as it was designed
  for mobility of devices, a trait not present in datacenter networks.
- 
 \end_layout
 
 \begin_layout Standard
@@ -2133,6 +2055,10 @@ name "tab:Path-Manager-Comparison"
 
 \end_layout
 
+\begin_layout Subsection
+Validating the Behavior of MPTCP Path Managers
+\end_layout
+
 \begin_layout Standard
 Considering the topology described in Figure 
 \begin_inset CommandInset ref
@@ -2141,10 +2067,9 @@ reference "fig:Mininet-topology"
 
 \end_inset
 
-, assuming all links are rated at 10 Mbps (i.e., the minimum supported transmissio
-n rate of both devices connected to the link is 10 Mbps), we expect to see
- TCP, default MPTCP, and ndiffports MPTCP to have a sender rate of 10 Mbps,
- whereas Full Mesh MPTCP can have a sender rate of up to 20 Mbps.
+, we expect to see TCP, default MPTCP, and ndiffports MPTCP to have a sender
+ rate of 10 Mbps, whereas Full Mesh MPTCP can have a sender rate of up to
+ 20 Mbps.
  This is because the first three would only use 1 IP address pair, and thus
  is limited to 1 subflow.
  But, the Full Mesh MPTCP establishes four subflows, because both hosts
@@ -2829,12 +2754,79 @@ As the topology considered for the previous experiments is relatively simpler
 \end_layout
 
 \begin_layout Section
-Testbed Setup
+Building the Test Environment
 \end_layout
 
 \begin_layout Standard
-Experiments and tests were ran on a SuperMicro bare metal server with the
- specifications listed below.
+Mininet was chosen to orchestrate the virtual network, its switches, and
+ its hosts.
+ The network topology is generated programmatically, and switch behavior
+ can be swapped through configuration files.
+ It also ensures that all virtual hosts are running on the same configuration
+ as the server it is running in.
+ This ease of use allows the researchers to implement multiple changes at
+ once.
+\end_layout
+
+\begin_layout Standard
+MPTCP is available as an ns-3 model 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kheirkhah2014ns3"
+
+\end_inset
+
+ or a kernel patch 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "uclouvain2017mptcp"
+
+\end_inset
+
+.
+ Juggler 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "geng2016juggler"
+
+\end_inset
+
+, which modifies the GRO function to fix packet ordering, is only readily
+ available as a kernel patch.
+ Since the experiments require hosts that require both features to be present,
+ it was decided that the kernel patches were to be used.
+ The MPTCP and Juggler custom kernels were merged together and applied to
+ the server to virtualize certain hosts.
+\end_layout
+
+\begin_layout Standard
+Switches, on the other hand, can be described with its normal forwarding
+ algorithm, which stores only one next-hop for all destinations in its routing
+ table.
+ However, the switches must also be capable of Equal Cost Multi-Path (ECMP),
+ and Packet Spraying (PS), which require a routing table storing multiple
+ next-hops.
+ Since these forwarding behavior require introspection into packet headers
+ and metadata, we utilized and modified software switches enabled by P4,
+ a programming language used to process packets 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bosshart2014p4"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Testbed Specifications
+\end_layout
+
+\begin_layout Standard
+Experiments and tests were ran on two SuperMicro bare metal server with
+ the specifications listed below.
+ One server will be patched with the MPTCP custom kernel only, and the other
+ with the merged MPTCP and Juggler kernel.
 \end_layout
 
 \begin_layout Standard
@@ -3205,138 +3197,7 @@ name "tab:testbed-specs"
 
 \end_inset
 
-Mininet will be used to simulate traffic between virtualized hosts.
- Mininet uses the configuration of the host operating system to simulate
- the hosts, which makes it easier to change the hosts' transport layer protocol.
-\end_layout
 
-\begin_layout Standard
-MPTCP can be installed through compiling a modified kernel, or installation
- through a public apt-repository 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "uclouvain2017multipath"
-
-\end_inset
-
-.
- For the initial tests, the installation through the apt-repository is enough.
- However, when reorder-resiliency in the hosts will be necessary, a modified
- kernel shall be used.
- 
-\end_layout
-
-\begin_layout Standard
-In addition, 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-tshark
-\end_layout
-
-\end_inset
-
-, and 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-git
-\end_layout
-
-\end_inset
-
- were installed as helper tools.
-\end_layout
-
-\begin_layout Subsection
-Configuring MPTCP
-\end_layout
-
-\begin_layout Standard
-To easily control the behavior of the host's transport protocol and MPTCP
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "uclouvain2017configure"
-
-\end_inset
-
-, the 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-sysctl
-\end_layout
-
-\end_inset
-
- feature is used.
- The transport protocol can be changed through 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-net.mptcp.mptcp_enabled
-\end_layout
-
-\end_inset
-
-.
- Furthermore, we can control the MPTCP path manager using 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-net.mptcp.mptcp_path_manager
-\end_layout
-
-\end_inset
-
-.
- The path manager can be set to 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-default
-\end_layout
-
-\end_inset
-
-, 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-ndiffports
-\end_layout
-
-\end_inset
-
-, 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-fullmesh
-\end_layout
-
-\end_inset
-
-, or 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-binder
-\end_layout
-
-\end_inset
-
-, as discussed previously.
 \end_layout
 
 \begin_layout Subsection
@@ -3358,7 +3219,7 @@ key "al2008scalable"
 
 .
  Mininet was used for the simulation of the nodes, and Python was used to
- construct the topology (See 
+ construct the topology (See Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "code-topogen"
@@ -4241,22 +4102,6 @@ Router Behavior
 \end_layout
 
 \begin_layout Standard
-Apart from setting up the topology, we also need to define the behavior
- of the switches, i.e.
- given the destination and other metadata found in the packet header, the
- router behavior dictates which port the packet is forwarded.
- For this purpose, we used P4, a programming language that specifies how
- switches and routers process packets 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "bosshart2014p4"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
 The P4 
 \begin_inset Flex Code
 status open
@@ -4714,13 +4559,14 @@ reference "code-tablegen-ps"
 \end_layout
 
 \begin_layout Section
-Test Sets and their Expected Behavior
+Test Design
 \end_layout
 
 \begin_layout Standard
-To review, the goals of the tests are to measure the performance of the
- varying network configurations previously discussed.
- In particular, the study will focus on throughput and flow completion time.
+To review, the goals of the tests are to measure the network performance
+ given varying configurations as previously discussed.
+ In particular, the study will test mainly throughput and flow completion
+ time, with goodput and mean network utilization as extra data points.
 \end_layout
 
 \begin_layout Standard
@@ -4729,25 +4575,450 @@ For the purposes of this section, a topology with
 \end_inset
 
  will be considered.
- This means that there are 16 hosts, 16 switches in the aggregate, 4 in
- the core.
+ This means that there are 16 hosts, 16 switches in the edge and aggregate
+ layers, and 4 switches in the core (see Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:k-4-topology"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+With this in mind, this allows for 4 unique paths between two hosts.
  
 \end_layout
 
 \begin_layout Standard
-Initially, the tests were run on a silent network to establish a baseline
- for the tests.
- In future tests, a rudimentary form of traffic will be added to the network
- to simulate a busy datacenter.
- 
+\begin_inset Formula 
+\begin{equation}
+Given\ k=4,\ paths_{max}=(\frac{K}{2})^{2}=(\frac{4}{2})^{2}=4=n\label{eq:max-paths-1}
+\end{equation}
+
+\end_inset
+
+Considering that each host uses only one interface to communicate to the
+ entire network, preference was given to using 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+ndiffports
+\end_layout
+
+\end_inset
+
+ (with 
+\begin_inset Formula $n=4$
+\end_inset
+
+ ) as MPTCP's path manager in this experiment.
+ This can be done through the 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+sysctl
+\end_layout
+
+\end_inset
+
+ feature.
+ The transport protocol can be changed through 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+net.mptcp.mptcp_enabled
+\end_layout
+
+\end_inset
+
+.
+ Furthermore, we can control the MPTCP path manager using 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+net.mptcp.mptcp_path_manager
+\end_layout
+
+\end_inset
+
+.
+ In this case, we set the path manager of MPTCP-enabled hosts to 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+ndiffports
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
-Flow Types and Definitions
+Network Traffic Conditions
 \end_layout
 
 \begin_layout Standard
-Three flow types are to be used and tested for these experiments: 
+Tests were done in two simulated network conditions.
+ The first condition assumed a network without any activity, allowing for
+ two hosts to communicate using all of the available resources of the network
+ (hereinafter referred to as a 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+silent network
+\end_layout
+
+\end_inset
+
+).
+ The second condition assumed some form of simulated traffic, comparable
+ to the performance in a live network (hereinafter referred to as a 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+noisy network
+\end_layout
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+These were done to observe the changes in the design metrics in different
+ network conditions.
+ Note that the simulation of traffic was an approximation and may not be
+ representative of the actual datacenter network traffic.
+ 
+\end_layout
+
+\begin_layout Standard
+In the 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+silent network
+\end_layout
+
+\end_inset
+
+, host pairs took turns at sending data to each other, without any other
+ activity in the network.
+ Pairs were chosen by random, ensuring that all hosts became a server or
+ client at some point.
+ The clients requested a payload of certain size from the server, one after
+ another.
+ This request was then repeated a certain number of times.
+ The designations were fixed for each iteration of the test.
+ This was done through a network bandwidth measurement tool named 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+iperf
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename onetoone.jpg
+	lyxscale 50
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Two hosts communicating in a 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+silent network
+\end_layout
+
+\end_inset
+
+ setup.
+ Note that there are no other network activity, and that there are four
+ paths between the two hosts (indicated by the green ang bluish lines).
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:one-to-one-topo"
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Two hosts communicating in a 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+silent network
+\end_layout
+
+\end_inset
+
+ setup
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+noisy network
+\end_layout
+
+\end_inset
+
+, two hosts requested data from multiple hosts at the same time, polluting
+ the network with activity.
+ The network was split between two groups with one client each, and the
+ rest acting as servers.
+ Considering again a fat-tree topology with 
+\begin_inset Formula $K=4$
+\end_inset
+
+, one client was chosen at random at the start of the test and seven were
+ chosen to be file servers.
+ Like the 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+silent network
+\end_layout
+
+\end_inset
+
+, designations were fixed for each iteration of the test.
+ This was done through an 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+HTTP
+\end_layout
+
+\end_inset
+
+ server in Python, and a tool to transfer data called 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+curl
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename onetomany.jpg
+	lyxscale 50
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Two host groups in a 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+noisy network
+\end_layout
+
+\end_inset
+
+ setup, colored in black and purple.
+ Note that one host in each group is designated as the client, to communicate
+ with the rest of the group.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:one-to-many-topo"
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Two host groups in a 
+\begin_inset Flex Emph
+status open
+
+\begin_layout Plain Layout
+noisy network
+\end_layout
+
+\end_inset
+
+ setup.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In both network conditions, multiple server-client pairs were used to obtain
+ a thorough assessment of the different links in the network.
+ Analysis was done through inspection of the packet capture output of Mininet.
+ Each test is also repeated to obtain a sufficient number of data points.
+\end_layout
+
+\begin_layout Subsection
+Test Parameters
+\end_layout
+
+\begin_layout Standard
+The testbed can have varying permutations of network and host configurations.
+ To aid in this, the test can be run using different testing parameters
+ namely, host reorder resiliency, switch forwarding protocol, transport
+ protocol, and payload sizes.
+\end_layout
+
+\begin_layout Standard
+Datacenters cater to requests of varying sizes.
+ To have an approximation of these requests and how they affect the performance
+ of the changes to the network stack, we included the option to test with
+ different payload sizes.
+ Three flow types are to be used and tested for these experiments: 
 \begin_inset Flex Code
 status open
 
@@ -4785,18 +5056,12 @@ key "alizadeh2010data"
 \end_inset
 
 .
- Considering the simulated link bandwidth (pegged at 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-20 Mbps
+ 
 \end_layout
 
-\end_inset
-
-) and common flow definitions, the following sizes were used when referring
- to the different flows.
+\begin_layout Standard
+Note that for the silent network, 128KB payload sizes were used as the tool
+ used did not allow for payload sizes to go below 128KB.
  
 \end_layout
 
@@ -4838,7 +5103,7 @@ Examples
 \begin_inset Text
 
 \begin_layout Plain Layout
-Size
+Silent Network
 \end_layout
 
 \end_inset
@@ -4847,7 +5112,7 @@ Size
 \begin_inset Text
 
 \begin_layout Plain Layout
-Ideal FCT
+Noisy Network
 \end_layout
 
 \end_inset
@@ -4912,7 +5177,7 @@ Quick, bursty connections
 \uwave off
 \noun off
 \color none
-10 kiB
+128 kiB
 \end_layout
 
 \end_inset
@@ -4933,7 +5198,7 @@ Quick, bursty connections
 \uwave off
 \noun off
 \color none
-~0.004096 s
+10 kiB
 \end_layout
 
 \end_inset
@@ -5019,7 +5284,7 @@ Web page requests
 \uwave off
 \noun off
 \color none
-~0.2048 s
+500 kiB
 \end_layout
 
 \end_inset
@@ -5093,19 +5358,7 @@ Streaming, VoIP, file hosting and transfer
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-~10.485 s
+25 MiB
 \end_layout
 
 \end_inset
@@ -5127,13 +5380,13 @@ Streaming, VoIP, file hosting and transfer
 status open
 
 \begin_layout Plain Layout
-Flow definitions and examples, corresponding sizes, and ideal FCTs
+Flow definitions, and their corresponding experimental sizes
 \end_layout
 
 \end_inset
 
-Flow definitions and examples, corresponding sizes, and ideal FCTs (based
- on a 20 Mb/s link bandwidth).
+Flow definitions, examples, and their corresponding sizes on both simulated
+ network traffic conditions.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:flow-types-defs"
@@ -5154,21 +5407,105 @@ name "tab:flow-types-defs"
 \end_layout
 
 \begin_layout Standard
-Since the ideal FCT is computed by simply dividing the flow size by the
- simulated link bandwidth without considering the additional overhead (connectio
-n handshake, termination, retransmissions, protocol-specific implementations),
- the measured FCT is expected to be larger.
- 
+As a baseline comparison for the improvements of MPTCP, a TCP option was
+ included in the testing environment.
+ These results served as a form of control for the performance of MPTCP
+ as a protocol.
+ In addition, the performance of the changes in the network stack with TCP
+ as its transport protocol was also measured and analyzed.
 \end_layout
 
 \begin_layout Subsection
-Test Sets
+Performance Metrics
 \end_layout
 
 \begin_layout Standard
-In line with the objectives of the study, nine test sets are to be used,
- with each test set ran against the three flow types as discussed previously.
- 
+To review, throughput, goodput, flow completion time, and mean network utilizati
+on between end-hosts were measured to assess the effects of reorder resiliency
+ in end-hosts and packet spraying in routers.
+\end_layout
+
+\begin_layout Subsubsection
+Throughput and Goodput
+\end_layout
+
+\begin_layout Standard
+We define throughput to be the rate of the bytes transferred between two
+ hosts in the network (i.e., total bytes transferred / flow completion time).
+ In contrast, goodput is the rate of the actual data (only the size of the
+ payload) transferred over a period of time (i.e., payload size in bytes /
+ flow completion time).
+\end_layout
+
+\begin_layout Standard
+A comparison between goodput and throughput can be used to indicate how
+ much overhead affects the actual transmission of data.
+ If throughput is higher than goodput, this can be an indication to the
+ presence of added MPTCP headers or packet retransmissions.
+ This translates to no perceptible improvement from the perspective of the
+ hosts.
+\end_layout
+
+\begin_layout Subsubsection
+Flow Completion Time
+\end_layout
+
+\begin_layout Standard
+We define flow completion time to be the amount of time that it takes for
+ a request between two hosts to complete.
+ This includes the first request packet sent from the client to the server
+ and the last 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+FIN
+\end_layout
+
+\end_inset
+
+ packet sent from server to the client.
+\end_layout
+
+\begin_layout Standard
+An increase in flow completion time can be attributed to the overhead of
+ connection establishment (for MPTCP), packet retransmissions, and/or 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+ACK
+\end_layout
+
+\end_inset
+
+ timeouts.
+\end_layout
+
+\begin_layout Subsubsection
+Mean Network Utilization
+\end_layout
+
+\begin_layout Standard
+For this paper, we consider mean network utilization to be the ratio of
+ used links between two hosts.
+ For a fat-tree network topology with 
+\begin_inset Formula $K=4$
+\end_inset
+
+, there are at most 4 paths that connect two hosts.
+ Ideally, mean network utilization is maximized if all of paths have the
+ near-equal (if not equal) minimum amount of bytes transferred in them (i.e.,
+ all paths have a balanced load with regards to the flow).
+\end_layout
+
+\begin_layout Subsection
+Statistical Tests
+\end_layout
+
+\begin_layout Standard
+All in all, the test clusters and independent variables can be summarized
+ with the following table.
 \end_layout
 
 \begin_layout Standard
@@ -5197,251 +5534,202 @@ textwidth}{!}{
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="10" columns="6">
+<lyxtabular version="3" rows="6" columns="9">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top" width="3cm">
 <column alignment="center" valignment="top" width="3cm">
 <column alignment="center" valignment="top" width="3cm">
-<column alignment="right" valignment="top" width="3cm">
-<column alignment="right" valignment="top" width="3cm">
+<column alignment="center" valignment="top" width="3cm">
+<column alignment="center" valignment="top" width="3cm">
+<column alignment="center" valignment="top" width="3cm">
+<column alignment="center" valignment="top" width="3cm">
+<column alignment="center" valignment="top" width="3cm">
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Router Behavior
+
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Juggler Modification
+
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Transport Layer Protocol
+
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-MPTCP Path Manager
+Test Clusters
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="2" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
- N (for 
-\begin_inset Flex Code
-status open
 
-\begin_layout Plain Layout
-ndiffports
-\end_layout
-
-\end_inset
-
-)
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-Maximum Number of Usable Paths
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-static
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-no
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
+Silent Network (1-1)
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="2" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Noisy Network (1-many)
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
+Independent Variables
+\end_layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ecmp
+ecmp-mptcp
 \end_layout
 
 \end_inset
@@ -5455,77 +5743,11 @@ ecmp
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-no
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-fullmesh
+vanilla
 \end_layout
 
 \end_inset
@@ -5535,71 +5757,89 @@ fullmesh
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
+query
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ecmp
+juggler
 \end_layout
 
 \end_inset
@@ -5613,19 +5853,7 @@ ecmp
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-no
+query
 \end_layout
 
 \end_inset
@@ -5634,19 +5862,7 @@ no
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP
+short
 \end_layout
 
 \end_inset
@@ -5655,109 +5871,58 @@ MPTCP
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ndiffports
-\end_layout
-
-\end_inset
-
-
+long
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4
+query
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-packet spraying
+ps-mptcp
 \end_layout
 
 \end_inset
@@ -5771,19 +5936,16 @@ packet spraying
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset Flex Code
+status open
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-no
+\begin_layout Plain Layout
+vanilla
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -5792,19 +5954,7 @@ no
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP
+query
 \end_layout
 
 \end_inset
@@ -5813,88 +5963,76 @@ TCP
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
+short
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
+long
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-4
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-packet spraying
+juggler
 \end_layout
 
 \end_inset
@@ -5908,19 +6046,7 @@ packet spraying
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-no
+query
 \end_layout
 
 \end_inset
@@ -5929,19 +6055,7 @@ no
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP
+short
 \end_layout
 
 \end_inset
@@ -5950,114 +6064,7 @@ MPTCP
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-fullmesh
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-packet spraying
-\end_layout
-
-\end_inset
-
-
+long
 \end_layout
 
 \end_inset
@@ -6066,19 +6073,7 @@ packet spraying
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-no
+query
 \end_layout
 
 \end_inset
@@ -6087,544 +6082,16 @@ no
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP
+short
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ndiffports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-packet spraying
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-yes
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-packet spraying
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-yes
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-fullmesh
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
--
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-packet spraying
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-yes
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ndiffports
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-4
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
+long
 \end_layout
 
 \end_inset
@@ -6657,8 +6124,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Test sets used, their configurations, and the maximum number of usable paths
- between two hosts.
+Test clusters and independent variables used in this experiment.
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:test-sets"
@@ -6679,168 +6145,69 @@ name "tab:test-sets"
 \end_layout
 
 \begin_layout Standard
-Test sets configured to use 
+There are two independent variables: the switch behavior combined with the
+ underlying transport protocol (
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-ndiffports
+ecmp-mptcp
 \end_layout
 
 \end_inset
 
- as MPTCP's path manager will use 
-\begin_inset Formula $n=4$
-\end_inset
-
-, the maximum number of paths between two hosts in a fat tree topology.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-Given\ k=4,\ paths_{max}=(\frac{K}{2})^{2}=(\frac{4}{2})^{2}=4=n\label{eq:max-paths}
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The test set with TCP running with statically-configured routers will serve
- as the control group.
- TCP and MPTCP tests will observe MPTCP's penalty for 
+, 
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-short
+ps-mptcp
 \end_layout
 
 \end_inset
 
- (and subsequently 
+), as well as the inclusion/non-inclusion of Juggler (
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-query
+vanilla
 \end_layout
 
 \end_inset
 
-) flows, and benefit for 
+, 
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-long
+juggler
 \end_layout
 
 \end_inset
 
- flows.
- Lastly, tests using packet spraying routers and the modified Juggler kernel
- and if packet spraying and/or the Juggler modification will affect the
- results significantly.
- 
-\end_layout
+).
+ There are six test clusters, grouped by network traffic conditions (
+\begin_inset Flex Emph
+status open
 
-\begin_layout Subsection
-Expectations
+\begin_layout Plain Layout
+silent network
 \end_layout
-
-\begin_layout Standard
-These expectations assume a network where only one host sends data at a
- time.
-\end_layout
-
-\begin_layout Subsubsection
-Flow Sizes and Switch Queues
-\end_layout
-
-\begin_layout Standard
-Given the small sizes of both query and short flows, switch overflows happen
- less than with long flows.
- This limits the occurrence of packet retransmissions, guaranteeing a smaller
- FCT.
-\end_layout
-
-\begin_layout Subsubsection
-Path Utilization
-\end_layout
-
-\begin_layout Standard
-Each test set is expected to have a maximum number of paths used described
- in 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "tab:testbed-specs"
 
 \end_inset
 
-.
-\end_layout
+, 
+\begin_inset Flex Emph
+status open
 
-\begin_layout Standard
-A fat tree network with ECMP-based routers, and MPTCP hosts using the full
- mesh path manager, can only use one path since each host is using only
- a single interface to connect to the rest of the network.
- Meanwhile, random packet spraying (random PS) will be able to maximize
- all possible paths between two hosts, computed with the formula described
- above 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:max-paths"
+\begin_layout Plain Layout
+noisy network
+\end_layout
 
 \end_inset
 
-.
-\end_layout
-
-\begin_layout Standard
-Generally, using multiple paths will lead to higher throughput, and therefore
- a smaller FCT compared to only using a single path.
- However, since these paths will eventually converge into the edge router
- a host is connected to, switch overflows might occur at the first phase
- of the flow, hurting throughput.
- These switch overflows will also trigger timeouts and retransmissions,
- which slows down FCT.
-\end_layout
-
-\begin_layout Subsection
-Test Initialization
-\end_layout
-
-\begin_layout Standard
-A test runner was created to build the topological structure of the fat
- tree network, log the network behavior, inject commands to the hosts, and
- extract essential information (such as throughput and flow completion time)
- through the logged network behavior.
- More information is available at the source code at Appendix 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "code-run-sh"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsection
-Test Proper
-\end_layout
-
-\begin_layout Standard
-Once the topology is built, the testing proper begins.
- 
-\end_layout
-
-\begin_layout Standard
-Each test set's results were obtained by measuring the throughput and flow
- completion time between the virtualized hosts in mininet.
- Each test is done with 
+), permuted with the three payload sizes (
 \begin_inset Flex Code
 status open
 
@@ -6860,7 +6227,7 @@ short
 
 \end_inset
 
-, and 
+, 
 \begin_inset Flex Code
 status open
 
@@ -6870,130 +6237,29 @@ long
 
 \end_inset
 
- flows to obtain a metric on each test set performance for a specific network
- traffic in the data center.
-\end_layout
-
-\begin_layout Standard
-Multiple server-client pairs were randomly chosen at the start of the test.
- This was done to obtain a thorough assessment of the different links in
- the network.
- The generation of server-client pairs is done such that each host will
- become a server and client at some point in the test.
-\end_layout
-
-\begin_layout Standard
-Tests and subsequent throughput measurements were obtained through the use
- of 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-iperf
-\end_layout
-
-\end_inset
-
-.
+).
  
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-Iperf
-\end_layout
-
-\end_inset
-
- is a command line utility that allows the measurement of throughput between
- two hosts in a network.
- In addition to its base use, 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-iperf
-\end_layout
-
-\end_inset
-
- also allows the specification of specified payload sizes or specific files
- to be used as the payload.
- In this case, predefined payload sizes 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "tab:flow-types-defs"
-
-\end_inset
-
- were used to match tests sets with a corresponding flow type.
- This injection and extraction process is done in a Python script executed
- within the mininet CLI (see Appendix 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "code-test"
-
-\end_inset
-
-).
 \end_layout
 
 \begin_layout Standard
-Since 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-iperf
-\end_layout
-
-\end_inset
-
- does not measure the flow completion time for the payload, packet captures
- were logged.
- However, these packet capture files are not saved to the disk completely
- up until the mininet instance is finished.
- Therefore, flow completion times were to be extracted after the iterations,
- and will be orchestrated through a Python script making use of 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-tshark
-\end_layout
-
-\end_inset
-
- (see Appendix 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "code-postprocess"
-
-\end_inset
-
-).
+There are four dependent variables pertaining to the performance metrics
+ discussed previously: throughput, goodput, flow completion time, and mean
+ network utilization.
 \end_layout
 
 \begin_layout Standard
-Each test is executed five times to gather sufficient data.
-\end_layout
-
-\begin_layout Section
-Experimental Hypotheses for a Silent Network and Initial Results
+Each test cluster was subjected to a two-way MANOVA to verify the significance
+ of the differences, and ranked via comparison of means.
 \end_layout
 
 \begin_layout Standard
-For a silent network (i.e., only two hosts are actively communicating to each
- other at a time), we propose the following hypotheses for both throughput
- and FCT.
-\end_layout
-
-\begin_layout Subsection
+Another experiment was also executed that includes TCP alongside MPTCP (the
+ addition of 
 \begin_inset Flex Code
 status open
 
 \begin_layout Plain Layout
-Query
+static-tcp
 \end_layout
 
 \end_inset
@@ -7003,1234 +6269,30 @@ Query
 status open
 
 \begin_layout Plain Layout
-Short
+ps-tcp
 \end_layout
 
 \end_inset
 
- Flows
+), to serve as control.
+ For the majority of the next chapter, we will be discussing the experiment
+ concerning MPTCP tests only.
 \end_layout
 
-\begin_layout Standard
-\begin_inset Float table
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-noindent
-\backslash
-resizebox{
-\backslash
-textwidth}{!}{
-\end_layout
-
-\end_inset
-
-
-\begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="3">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top" width="12cm">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Metric
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Hypothesis
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Reason
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Throughput
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP > FM
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP exhibits prominent connection establishment complexity (remember that
- both setups use only one path)
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Throughput
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-(TCP > FM) << 4D
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ndiffports - 4
-\end_layout
-
-\end_inset
-
- compensates for throughput with more used paths, and the lack of switch
- overflows
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-FCT
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP < MPTCP
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-MPTCP exhibits prominent connection establishment complexity
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-FCT
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-(TCP < 4D < FM)?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-ndiffports - 4
-\end_layout
-
-\end_inset
-
- compensates for time, lacking switch overflows
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Comparative hypotheses for 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-query
-\end_layout
-
-\end_inset
-
- and 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-short
-\end_layout
-
-\end_inset
-
- flows.
-\begin_inset CommandInset label
-LatexCommand label
-name "tab:hypo-query-short"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+\begin_layout Chapter
+Results and Analysis
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-noindent
-\backslash
-resizebox{
-\backslash
-textwidth}{!}{
+Lorem ipsum.
 \end_layout
 
-\end_inset
-
-
-\begin_inset Graphics
-	filename results_query.png
-
-\end_inset
-
-
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Throughput (Mbps) and FCT (s) box graphs for 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-query
-\end_layout
-
-\end_inset
-
- flows with varying test set combinations.
- 
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:chart-query"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
+\begin_layout Chapter
+Conclusion and Recommendations 
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-noindent
-\backslash
-resizebox{
-\backslash
-textwidth}{!}{
-\end_layout
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename results_short.png
-
-\end_inset
-
-
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Throughput (Mbps) and FCT (s) box graphs for 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-short
-\end_layout
-
-\end_inset
-
- flows with varying test set combinations.
- 
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:chart-short"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-Long
-\end_layout
-
-\end_inset
-
- Flows
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float table
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-noindent
-\backslash
-resizebox{
-\backslash
-textwidth}{!}{
-\end_layout
-
-\end_inset
-
-
-\begin_inset Tabular
-<lyxtabular version="3" rows="4" columns="3">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top" width="12cm">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Metric
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Hypothesis
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Reason
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Throughput
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP > 4D >~ FM
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Switch overflows are now prominent, which reduces sender throughput.
- This allows TCP to get closer to the link bandwidth versus MPTCP.
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-FCT
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-TCP < MPTCP
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-Connection establishment complexity effects now diluted
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-FCT
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-(TCP < 4D ~ FM)?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-This can be attributed either to computational complexity of ECMP switches,
- or congestion control
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\align center
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Comparative hypotheses for 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-long
-\end_layout
-
-\end_inset
-
- flows.
-\begin_inset CommandInset label
-LatexCommand label
-name "tab:hypo-long"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\align center
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-noindent
-\backslash
-resizebox{
-\backslash
-textwidth}{!}{
-\end_layout
-
-\end_inset
-
-
-\begin_inset Graphics
-	filename results_long.png
-
-\end_inset
-
-
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Throughput (Mbps) and FCT (s) box graphs for 
-\begin_inset Flex Code
-status open
-
-\begin_layout Plain Layout
-long
-\end_layout
-
-\end_inset
-
- flows with varying test set combinations.
- 
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:chart-long"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
+Lorem ipsum.
 \begin_inset Newpage cleardoublepage
 \end_inset
 
@@ -15845,7 +13907,7 @@ Experimental Results
 \end_layout
 
 \begin_layout Section
-Raw Results (Test Sets 1-6)
+Raw Results
 \end_layout
 
 \begin_layout Standard
@@ -15857,17 +13919,24 @@ reference "tab:test-sets"
 \end_inset
 
 .
- Each test set was executed against the three flow types, iterating over
- all hosts in the network.
- During each iteration, each host must act as a server and a client eventually.
- This is done five times, and the data is collected into a JSON file.
- The raw data is available at 
+ All results (including those that included TCP end-hosts), SPSS outputs,
+ and SPSS-ready 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+.csv
+\end_layout
+
+\end_inset
+
+ files is available at 
 \begin_inset Flex URL
 status open
 
 \begin_layout Plain Layout
 
-https://mmfsdt-aggregate-server.now.sh/aggregate_mar_9.json
+https://github.com/MMfSDT/thesis-results
 \end_layout
 
 \end_inset
