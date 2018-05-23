@@ -341,7 +341,7 @@
     \fmfont
     {{\@title} \par}
     \bigskip \bigskip
-    Undergraduate Project Proposal \par
+    Undergraduate Project \par
     % \bigskip \medskip
     \vfill
     by

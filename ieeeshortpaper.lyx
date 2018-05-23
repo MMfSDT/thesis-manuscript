@@ -1,0 +1,3806 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass IEEEtran
+\begin_preamble
+% for subfigures/subtables
+\usepackage[caption=false,font=footnotesize]{subfig}
+\end_preamble
+\options conference
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command bibtex
+\index_command default
+\float_placement tbh
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Your Title"
+\pdf_author "Your Name"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen true
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle false
+\pdf_quoted_options "pdfpagelayout=OneColumn, pdfnewwindow=true, pdfstartview=XYZ, plainpages=false"
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 2
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+This is a template \SpecialChar LyX
+ file for conference articles of conferences organized
+ by the Institute of Electrical and Electronics Engineers (IEEE).
+ For IEEE journal articles, see the template file 
+\emph on
+IEEEtran-Journal.lyx
+\emph default
+.
+ For general info see 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://wiki.lyx.org/Examples/IEEE
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+It is important that you use the correct document class options for your
+ document..
+ These are explained in the IEEEtran documentation: 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://mirror.ctan.org/macros/latex/contrib/IEEEtran/IEEEtran_HOWTO.pdf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Improving Data Center Network Performance through Path Diversity
+\end_layout
+
+\begin_layout Author
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+the standard way: 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Author Name
+status open
+
+\begin_layout Plain Layout
+Charles Joshua M.
+ Alba, Kyle Dominic A.
+ Gomez, Rene Josiah M.
+ Quinto
+\end_layout
+
+\end_inset
+
+
+\begin_inset Flex Author Affiliation
+status open
+
+\begin_layout Plain Layout
+Electrical and Electronics Engineering Institute
+\begin_inset Newline newline
+\end_inset
+
+University of the Philippines - Diliman
+\begin_inset Newline newline
+\end_inset
+
+Quezon City, Philippines
+\begin_inset Newline newline
+\end_inset
+
+Email: charles.alba@eee.upd.edu.ph, kyle.gomez@eee.upd.edu.ph, rene.josiah.quinto@eee.upd.ed
+u.ph
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+Datacenter networks allow the operation of Internet services by partitioning
+ requests to multiple servers, and aggregating results back to form the
+ response sent to the users.
+ This requires servers within the datacenter to communicate efficiently
+ and rapidly.
+ Services, differentiated by their workload profiles, require a network
+ that can guarantee high throughput, and low flow completion time.
+ To achieve these, this paper focused on the effects of Multipath TCP (MPTCP)
+ as a transport protocol in the context of datacenters, by making better
+ use of the network topology.
+ In addition, changes in the packet forwarding protocol within network switches
+ and the Generic Offload Receiver (GRO) layer within network servers were
+ employed, providing increased reordering resiliency, to make up for MPTCP's
+ undesired behavior within datacenters such as network link hotspots.
+ With this, the researchers hypothesized an increase in throughput and decrease
+ in the flow completion time.
+ To test this, a simulated datacenter environment was created tweaking flow
+ types, network traffic conditions, switch behavior, transport protocol,
+ and host-based reordering resiliency.
+ Link throughput and goodput, as well as flow completion time and mean network
+ utilization was then measured.
+ Analyzing the data, the study found that packet spraying turned out to
+ be generally beneficial for the network in terms of all metrics (throughput,
+ goodput, flow completion time, and mean network utilization).
+ The change in the GRO layer, on the other hand, provided mixed results.
+ By simply comparing the means, a simulated network with traffic designed
+ to be close to an actual data center generally performed better in all
+ metrics with switches that perform packet spraying, as well as MPTCP-enabled
+ servers with the GRO layer modification.
+\end_layout
+
+\begin_layout Peer Review Title
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Don't add text here!
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+required if you use the document class option 
+\family sans
+peerreview
+\family default
+, must otherwise not be used
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Common topologies in datacenter networks exhibit symmetry and path diversity
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "he2008toward"
+
+\end_inset
+
+.
+ This ensures that multiple paths of equal costs exist between two end-hosts
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "dixit2013impact"
+
+\end_inset
+
+.
+ In addition, an ideal datacenter network must guarantee high throughput
+ for large flows, and low latency for short flows 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "alizadeh2010data,he2008toward"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Multipath TCP (MPTCP), an experimental protocol by the IETF, is a TCP extension
+ that uses multiple paths over many connections 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ford2013tcp"
+
+\end_inset
+
+.
+ By using multiple paths simultaneously, MPTCP aims to increase network
+ utilization, specifically throughput, and increase "resilience of connectivity"
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fordmptcpslides"
+
+\end_inset
+
+.
+ This is done by employing Equal Cost Multi-Path (ECMP) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "raiciu2011improving"
+
+\end_inset
+
+, a switch-based forwarding algorithm.
+ ECMP hashes subflows into separate paths using the packet's header information.
+ However, hotspots in the network may occur when flows are hashed to paths
+ with one or more links overlapping with each other 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "al2010hedera"
+
+\end_inset
+
+, usually exceeding the link capacity.
+ Because of this, the network experiences a drop in network utilization
+ due to sender backoff 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "dixit2013impact"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+Review of Related Literature
+\end_layout
+
+\begin_layout Standard
+Random packet spraying, an alternative to ECMP, can be used to resolve hotspots
+ as it allows for a greater granularity for load balancing 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "he2008toward"
+
+\end_inset
+
+.
+ However, this can result in packets that come out-of-order at the receiver,
+ triggering false retransmissions upon receipt of three duplicated packet
+ acknowledgements 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ford2011architectural"
+
+\end_inset
+
+, in addition to drastically reducing sender throughput 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zhang2003rr"
+
+\end_inset
+
+.
+ This can be minimized by dynamically changing the retransmission threshold.
+ However, a positive mismatch on the threshold may mean a slower response
+ time for actual packet drops 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zhang2003rr"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Minimizing retransmission due to out-of-order packets can be done by supplementi
+ng the function of the Generic Receive Offload (GRO) layer to fix the order
+ of packets 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "geng2016juggler"
+
+\end_inset
+
+ in addition to merging packets together.
+ This not only reduces computational overhead compared to per-packet processing,
+ but makes the end-hosts more tolerant to packet reordering, and thus reduces
+ retransmissions.
+ However, reordered packets must arrive within a short delay of each other
+ since the switch queues are limited and timeouts are smaller.
+ 
+\end_layout
+
+\begin_layout Standard
+Also, to maintain backwards compatibility with TCP, MPTCP also suffers from
+ the complexity in connection establishment 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "dixit2013impact"
+
+\end_inset
+
+ and slow start 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "stevens1997tcp"
+
+\end_inset
+
+, which in turn penalizes short flows through higher flow completion times.
+ To maintain lower flow completion times and lower latency for short flows,
+ a specified amount of packets are sprayed through multiple paths initially
+ before switching to MPTCP 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kheirkhah2016mmptcp"
+
+\end_inset
+
+.
+ However, this means that it inherits problems from both implementations
+ altogether.
+ 
+\end_layout
+
+\begin_layout Standard
+Better network utilization can be also achieved using Software-Defined Networkin
+g 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "hussein2017sdn,zannettou2016exploiting"
+
+\end_inset
+
+ with MPTCP.
+ With a global view of the network, it can better utilize path diversity,
+ have a better gauge on the number of subflows per connection, and ideally
+ minimize the receipt of out-of-order packets.
+ This solution benefits large flows, but due to the added controller overhead,
+ it may penalize short flows.
+ In addition, it may also have some scalability issues 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "zannettou2016exploiting"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To combat delay and lower throughput caused by multiple timeouts on wireless
+ networks, retransmission redundancy was implemented using full and partial
+ bicasting over MPTCP 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "fukuyama2016throughput"
+
+\end_inset
+
+.
+ This may not necessarily be effective in the datacenter setup as redundant
+ packets may cause more false retransmissions.
+\end_layout
+
+\begin_layout Section
+Problem Statement and Objectives
+\end_layout
+
+\begin_layout Standard
+An increase in datacenter network performance (higher throughput, lower
+ flow completion time) is ideal not only for the company but for its users
+ as well.
+ Employing MPTCP in a network alone will bring a comparable difference compared
+ to TCP (higher throughput due to its use of multiple paths), however it
+ comes with its drawbacks (longer flow completion time due to connection
+ establishment complexity; appearance of network hotspots).
+\end_layout
+
+\begin_layout Standard
+The researchers hypothesized that an increase in overall throughput and
+ network utilization in MPTCP can be achieved through implementing packet
+ spraying in the network instead of ECMP.
+ Since packet spraying can introduce an eventual decrease in throughput,
+ the researchers hypothesized that this can be mitigated by creating reorder-res
+ilient end-hosts.
+ By comparing the results we see from different experiments, the basis for
+ considering a reorder-resilient network for future datacenter networks
+ can be strengthened, as well as have the results potentially contribute
+ to the growth of MPTCP as an experimental protocol.
+\end_layout
+
+\begin_layout Subsection
+Objectives
+\end_layout
+
+\begin_layout Standard
+The objectives of this work were as follows: First was to experimentally
+ prove that MPTCP benefits large flows, but penalizes short flows.
+ Next was to understand and prove that network hotspots occur due to ECMP-based
+ switches.
+ Lastly, observe and analyze the effects of packet spraying switches, as
+ well as reorder-resilient hosts, to minimize network hotspots, and in turn
+ benefit both short and large flows.
+\end_layout
+
+\begin_layout Subsection
+Scope and Limitation
+\end_layout
+
+\begin_layout Standard
+The project focused on datacenter networks, and assumed ideal working conditions.
+ More specifically, this project did not consider the possibility of switch
+ failures, host failures, link damages that could cause degradation of performan
+ce or even disconnections.
+ Among datacenter topologies, only fat tree topologies and possible variants
+ were considered.
+ 
+\end_layout
+
+\begin_layout Standard
+While the nature and topology of datacenter networks are highly distinct
+ from the vast majority of the Internet, or wide area networks (WANs), the
+ results and observations presented in this paper may potentially apply
+ to WANs as well.
+\end_layout
+
+\begin_layout Standard
+As this paper relied heavily on experiments done through network simulations,
+ this project cannot guarantee the realization of actual or realistic datacenter
+ network traffic, but tests were made to mimic certain datacenter network
+ conditions such as worst-case scenarios.
+ 
+\end_layout
+
+\begin_layout Section
+Methodology
+\end_layout
+
+\begin_layout Subsection
+Validating the Behavior of MPTCP Path Managers
+\end_layout
+
+\begin_layout Standard
+Preliminary work was executed to investigate the performance between three
+ out of four MPTCP path managers (default MPTCP, 
+\family typewriter
+fullmesh
+\family default
+ MPTCP, and 
+\family typewriter
+ndiffports
+\family default
+ MPTCP) compared to the performance of TCP.
+ Based on the results, TCP had the fastest flow completion time out of the
+ four, being beneficial to short flows.
+ 
+\family typewriter
+Fullmesh
+\family default
+ MPTCP achieved the highest throughput overall, being able to take advantage
+ of multiple paths, making it ideal for large flows.
+ However, it had the slowest flow completion time, which may be attributed
+ to extra packets being sent.
+\end_layout
+
+\begin_layout Subsection
+Building the Test Environment
+\end_layout
+
+\begin_layout Standard
+Mininet was chosen to orchestrate the virtual network, its switches, and
+ its hosts.
+ It ensured that all virtual hosts are running on the same configuration
+ as the server it was running in.
+ This allowed the researchers to implement multiple changes at once.
+ The network topology was generated programmatically, and switch behavior
+ was swapped through configuration files.
+\end_layout
+
+\begin_layout Standard
+MPTCP was available as an ns-3 model 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kheirkhah2014ns3"
+
+\end_inset
+
+ or a kernel patch 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "uclouvain2017mptcp"
+
+\end_inset
+
+.
+ Juggler 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "geng2016juggler"
+
+\end_inset
+
+, which modifies the GRO function to increase packet reordering resiliency,
+ was only readily available as a kernel patch.
+ Since the experiments required hosts that needed both features, a custom
+ kernel was prepared with the MPTCP kernel and Juggler kernel merged together.
+ This was then applied to the server to virtualize certain hosts.
+\end_layout
+
+\begin_layout Standard
+Switches, on the other hand, were described with its normal forwarding algorithm
+, which stores only one next-hop for all destinations in its routing table.
+ The switches were also capable of Equal Cost Multi-Path (ECMP), and Packet
+ Spraying (PS), which required a routing table storing multiple next-hops.
+ Since these forwarding behavior require inspection into packet headers
+ and metadata, we utilized and modified software switches enabled by P4,
+ a programming language used to process packets 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bosshart2014p4"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Testbed Specifications
+\end_layout
+
+\begin_layout Standard
+Experiments and tests ran on two SuperMicro bare metal servers with the
+ specifications listed on Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:testbed-specs"
+
+\end_inset
+
+.
+ One server was patched with the MPTCP custom kernel only, and the other
+ with the merged MPTCP and Juggler kernel.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Technical Specifications
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Processor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Intel(R) Core i7-3612QE
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Processor speed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+2.10 GHz
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Number of cores
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+4
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+RAM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+16 GB
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Operating system
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Ubuntu 16.04.3 LTS
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Linux kernel (MPTCP only)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+4.9.60.mptcp
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Linux kernel (MPTCP + Juggler)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.14.24
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Technical specifications of the testbed.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:testbed-specs"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Setting up the Network Topology
+\end_layout
+
+\begin_layout Standard
+For this study, the fat tree topology was chosen because it was a common
+ and scalable data center network topology.
+ Like all DCN topologies, the fat tree topology provides several equal cost
+ paths between any two end-hosts.
+ Moreover, because the topology maintains its symmetry regardless of its
+ size, a Mininet topology can be easily set up with unique addressing 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "al2008scalable"
+
+\end_inset
+
+.
+ Mininet was used for the simulation of the end-hosts and switches, and
+ Python was used to construct the topology.
+ A 
+\begin_inset Formula $K=4$
+\end_inset
+
+ fat tree topology can be seen in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:k-4-topology"
+
+\end_inset
+
+, complete with the conventions used.
+ With this in mind, this allowed for 4 unique paths between two hosts.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+Given\ k=4,\ paths_{max}=(\frac{K}{2})^{2}=(\frac{4}{2})^{2}=4=n\label{eq:max-paths-1-1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Considering that each host used only one interface to communicate to the
+ entire network, preference was given to using 
+\family typewriter
+ndiffports
+\family default
+ (with 
+\begin_inset Formula $n=4$
+\end_inset
+
+) as MPTCP's path manager in this experiment.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{0.45
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename experimenttopo.jpg
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Fat tree (k = 4) topology in Mininet, including naming and addressing convention
+s.
+ Pods were the large groups of end-hosts and switches numbered 0 to 3.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:k-4-topology"
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Fat tree (k = 4) topology in Mininet
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Test Design
+\end_layout
+
+\begin_layout Subsubsection
+Network Traffic Conditions
+\end_layout
+
+\begin_layout Standard
+Tests were done in two simulated network conditions/setups.
+ The first condition assumed a network without any activity, allowing for
+ two hosts to communicate using all of the available resources of the network
+ (hereinafter referred to as a 
+\family typewriter
+silent network
+\family default
+).
+ The second condition assumed some form of simulated traffic, comparable
+ to the performance in a live network (hereinafter referred to as a 
+\family typewriter
+noisy network
+\family default
+).
+ 
+\end_layout
+
+\begin_layout Standard
+In the 
+\family typewriter
+silent network
+\family default
+, host pairs took turns at sending data to each other, without any other
+ activity in the network.
+ Pairs were chosen by random, ensuring that all hosts became a server or
+ client at some point.
+ The clients requested a payload of certain size from the server (this defined
+ the flow type), one after another.
+ This request was then repeated a certain number of times.
+ The designations were fixed for each iteration of the test.
+ The payload transfer was done through a network bandwidth measurement tool
+ named 
+\family typewriter
+iperf
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{0.45
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename onetoone.jpg
+	lyxscale 50
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Two hosts communicating in a 
+\family typewriter
+silent network
+\family default
+ setup.
+ Note that there are no other network activity, and that there are four
+ paths between the two hosts (indicated by the green and bluish lines).
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:one-to-one-topo"
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Two hosts communicating in a 
+\family typewriter
+silent network
+\family default
+ setup
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the 
+\family typewriter
+noisy network
+\family default
+, two hosts requested data from multiple hosts at the same time, polluting
+ the network with activity.
+ For a fat tree topology with 
+\begin_inset Formula $K=4$
+\end_inset
+
+, this meant that the network was split between two groups, with each having
+ one client chosen at random, and seven chosen to be servers.
+ Like the 
+\family typewriter
+silent network
+\family default
+, designations were fixed for each iteration of the test.
+ This behavior mimics the partition-aggregate design pattern of DCNs 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "alizadeh2010data"
+
+\end_inset
+
+.The payload transfer was done through an 
+\family typewriter
+HTTP
+\family default
+ server in Python, and a tool to transfer data called 
+\family typewriter
+curl
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{0.45
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename onetomany.jpg
+	lyxscale 50
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Two host groups in a 
+\family typewriter
+noisy network
+\family default
+ setup, colored in black and purple.
+ Note that one host in each group is designated as the client, to communicate
+ with the rest of the group.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:one-to-many-topo"
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Two host groups in a 
+\family typewriter
+noisy network
+\family default
+ setup.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In both network conditions, multiple server-client pairs were used to obtain
+ a thorough assessment of the different links in the network.
+ Analysis was done through inspection of the packet capture output of Mininet.
+ Each test was also repeated to obtain a sufficient number of data points.
+\end_layout
+
+\begin_layout Subsubsection
+Test Parameters
+\end_layout
+
+\begin_layout Standard
+Datacenters cater to requests of varying sizes.
+ To have an approximation of these requests and how they affect the performance
+ of the changes to the network stack, we included the option to test with
+ different flow types, done by defining payload sizes.
+ Three flow types are to be used and tested for these experiments: 
+\family typewriter
+query
+\family default
+, 
+\family typewriter
+short
+\family default
+, and 
+\family typewriter
+long
+\family default
+ (previously referred to as 
+\family typewriter
+large
+\family default
+) flows 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "alizadeh2010data"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Note that for the silent network, a query flow was defined with a flow size
+ of 
+\family typewriter
+128KB
+\family default
+ as the tool used did not allow for the payload size to go below 
+\family typewriter
+128KB
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{0.45
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top" width="3cm">
+<column alignment="center" valignment="top" width="1cm">
+<column alignment="center" valignment="top" width="1cm">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Flow
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Examples
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Silent Network
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Noisy Network
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Quick, bursty connections
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+128 KB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+10 KB
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Web page requests
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+500 KB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+500 KB
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Streaming, VoIP, file hosting and transfer
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+25 MB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25 MB
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Flow definitions, and their corresponding experimental sizes
+\end_layout
+
+\end_inset
+
+Flow definitions, examples, and their corresponding sizes on both simulated
+ network traffic conditions.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:flow-types-defs"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As a baseline comparison for the improvements of MPTCP, a TCP option was
+ included in the testing environment.
+ These results can serve as a control group for the comparison of the performanc
+e of MPTCP as a protocol.
+ In addition, the performance of the changes in the network stack with TCP
+ as its transport protocol was also measured and analyzed.
+\end_layout
+
+\begin_layout Subsubsection
+Performance Metrics
+\end_layout
+
+\begin_layout Standard
+Packets were aggregated to flows (based on the 5-tuple) and were grouped
+ together by links.
+ By tracing the links traversed by flows between two end-hosts, the following
+ were discovered: the unique shortest paths used, the total amount of bytes
+ transferred within the interface associated with the flow, and the time
+ it took for the flow to complete.
+ This allowed for the following performance metrics to be derived.
+\end_layout
+
+\begin_layout Paragraph
+Throughput and Goodput
+\end_layout
+
+\begin_layout Standard
+Throughput was to be the rate of the bytes transferred between two hosts
+ in the network (i.e., total bytes transferred in all flows / flow completion
+ time).
+ In contrast, goodput was the rate of the actual data (only the size of
+ the payload) transferred over a period of time (i.e., payload size in bytes
+ / flow completion time).
+\end_layout
+
+\begin_layout Standard
+A comparison between goodput and throughput can be used to indicate how
+ much overhead affects the rate of transmission of actual data.
+ If throughput is higher than goodput, this can be an indication to the
+ presence of added MPTCP headers or packet retransmissions.
+ This translates to no perceptible improvement from the perspective of the
+ hosts.
+\end_layout
+
+\begin_layout Paragraph
+Flow Completion Time
+\end_layout
+
+\begin_layout Standard
+Flow completion time was defined to be the amount of time that a request
+ between two hosts took to complete.
+ This included the first request packet sent from the client to the server
+ and the last 
+\family typewriter
+FIN
+\family default
+ packet sent from server to the client.
+ For instances with multiple flows, the flow that took the longest time
+ to complete was considered.
+\end_layout
+
+\begin_layout Standard
+An increase in flow completion time can be attributed to the overhead of
+ connection establishment (for MPTCP), packet retransmissions, and/or 
+\family typewriter
+ACK
+\family default
+ timeouts.
+\end_layout
+
+\begin_layout Paragraph
+Mean Network Utilization
+\end_layout
+
+\begin_layout Standard
+For this paper, mean network utilization was considered to be the ratio
+ of used links between two hosts.
+ Knowing both used and unused unique shortest paths, mean network utilization
+ was considered to be maximized if all interfaces with the smallest number
+ of bytes transferred per path had about the same value.
+ For example, if two end-hosts with four unique shortest paths between them
+ used only one path out of four, the mean network utilization will be 25%
+ (0.25).
+\end_layout
+
+\begin_layout Subsubsection
+Statistical Tests
+\end_layout
+
+\begin_layout Standard
+All in all, the test clusters and independent variables was summarized in
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:test-sets"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{0.45
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="9">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="2cm">
+<column alignment="left" valignment="middle" width="2cm">
+<column alignment="center" valignment="top" width="1.5cm">
+<column alignment="center" valignment="top" width="1cm">
+<column alignment="center" valignment="top" width="1cm">
+<column alignment="center" valignment="top" width="1cm">
+<column alignment="center" valignment="top" width="1cm">
+<column alignment="center" valignment="top" width="1cm">
+<column alignment="center" valignment="top" width="1cm">
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Test Clusters
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Silent Network (1-1)
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Noisy Network (1-many)
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Independent Variables
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+ecmp-mptcp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+vanilla
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+juggler
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+ps-mptcp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+vanilla
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+juggler
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Test clusters and independent variables used in this experiment
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:test-sets"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There were two independent variables: the switch behavior combined with
+ the underlying transport protocol (
+\family typewriter
+ecmp-mptcp
+\family default
+, 
+\family typewriter
+ps-mptcp
+\family default
+), as well as the inclusion/non-inclusion of Juggler (
+\family typewriter
+juggler
+\family default
+, 
+\family typewriter
+vanilla
+\family default
+ respectively).
+ There were six test clusters, grouped by network traffic conditions (
+\family typewriter
+silent network
+\family default
+, 
+\family typewriter
+noisy network
+\family default
+), permuted with the three flow types/payload sizes (query, short, long).
+ 
+\end_layout
+
+\begin_layout Standard
+There were four dependent variables pertaining to the performance metrics
+ discussed previously: throughput, goodput, flow completion time, and mean
+ network utilization.
+\end_layout
+
+\begin_layout Standard
+Each test cluster was subjected to a two-way MANOVA to verify the significance
+ of the differences, and the performance of the independent variables were
+ ranked via comparison of means.
+ In addition, a comparison of percent differences of goodput and throughput
+ was executed to inspect the effects of hotspots in the network.
+\end_layout
+
+\begin_layout Standard
+Another experiment which included TCP tests serving as control groups (the
+ addition of 
+\family typewriter
+static-tcp
+\family default
+ and 
+\family typewriter
+ps-tcp
+\family default
+ to the existing switch behavior-transport protocol pairs) was also executed.
+ For the majority of the next chapter however, the experiments discussed
+ MPTCP tests only.
+\end_layout
+
+\begin_layout Section
+Results and Analysis
+\end_layout
+
+\begin_layout Standard
+A proper multivariate analysis of variance (MANOVA) meets the following
+ assumptions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "noauthor_how_nodate"
+
+\end_inset
+
+: dependent variables should be continuous, independent variables should
+ consist of two or more categorical groups, there should be independence
+ between observations, and there should be a sufficient number of data points.
+ These four assumptions were met by virtue of the experimental setup.
+ 
+\end_layout
+
+\begin_layout Standard
+Other assumptions for MANOVA not listed above, if unmet, reduce the validity
+ of the results.
+ Some tests did show that the data set did not meet some of these assumptions,
+ which meant that the following results should be interpreted with reservations.
+\end_layout
+
+\begin_layout Subsection
+Tests of Between-Subjects Effects and Best Performing Independent Variables
+\end_layout
+
+\begin_layout Standard
+A confidence interval of 95% (
+\begin_inset Formula $\alpha=0.05$
+\end_inset
+
+) was chosen to determine the significance of the various test groups.
+ For this chapter, focus is given solely on the tests of between-subjects
+ effects.
+ The independent variables with the highest mean for outcomes that had a
+ significant result were then identified.
+\end_layout
+
+\begin_layout Standard
+For a given link in the network, bandwidth was limited to 20 Mbps.
+ Tests within a silent network, specifically for throughput, goodput, and
+ flow completion time were mostly inconclusive.
+ This may be attributed to the nature of the silent network–with all configurati
+ons able to maximize the network capacity, the results may turn out with
+ little difference with each other.
+ With the throughput and goodput for a given flow for all configurations
+ naturally reaching the bandwidth cap, flow completion time may not differ
+ greatly between setups.
+\end_layout
+
+\begin_layout Subsection
+Gap Between Goodput and Throughput as an Indicator of Network Hotspots
+\end_layout
+
+\begin_layout Standard
+Network hotspots, defined as switches that have links that are near to exceed
+ their capacity, result in an increase of dropped packets and increased
+ packet retransmissions.
+ This results in an increase in flow completion time, as well as the total
+ amount of bytes transferred.
+ Therefore, a significant gap between throughput and goodput may be noticed
+ if network hotspots are in the network.
+ 
+\end_layout
+
+\begin_layout Standard
+In this experiment, the observed means of goodput and throughput for statically-
+configured switches (with hosts running TCP), ECMP-based switches (with
+ hosts running MPTCP), and PS-based switches (with hosts running TCP and
+ hosts running MPTCP) were taken.
+ The percentages of traffic in excess of the actual flow size were then
+ calculated.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+resizebox{0.45
+\backslash
+textwidth}{!}{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="6">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="2cm">
+<column alignment="left" valignment="middle" width="1cm">
+<column alignment="right" valignment="top" width="1cm">
+<column alignment="right" valignment="top" width="1cm">
+<column alignment="right" valignment="top" width="1cm">
+<column alignment="right" valignment="top" width="1cm">
+<row>
+<cell multirow="3" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Network Traffic Conditions
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Flow Type
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Switch Behavior and Transport Protocol
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Statically-configured switches (TCP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Packet Spraying-based switches (TCP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ECMP-based switches (MPTCP)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Packet Spraying-based switches (MPTCP)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Silent Network (1-1)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+8.99%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+10.54%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+12.96%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+13.39%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+9.68%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+11.41%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+18.62%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+17.50%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+31.69%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+30.18%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+35.44%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+34.47%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Noisy Network (1-many)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+query
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+16.29%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+23.61%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+31.25%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+31.65%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+short
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+32.05%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+43.71%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+47.69%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+47.71%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+long
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+51.16%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+54.37%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+57.80%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+58.10%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Percentage of traffic in excess of "good" traffic
+\end_layout
+
+\end_inset
+
+Percentage of traffic in excess of "good" traffic (i.e., actual payload size).
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:gap-hotspots"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The results show that statically-configured switches had significantly less
+ excess traffic over both ECMP-based switches and PS-based switches for
+ query and short flows.
+ However, during long flows, the difference between all the switch behaviors
+ seemed insignificant.
+ In all cases, ECMP-based switches and PS-based switches (with hosts running
+ MPTCP) performed comparably equally, implying that packet spraying did
+ not mitigate the hotspot problem.
+\end_layout
+
+\begin_layout Standard
+By assuming that excess traffic correlates to multiple retransmissions and
+ the presence of hotspots, increasing the number of paths used may not always
+ result in an increase in goodput especially if these paths shared common
+ links (i.e., hosts only had one interface connected to the entire network,
+ resulting in clogs).
+\end_layout
+
+\begin_layout Subsection
+Flow Completion Time Performed Worse with Reorder-Resilient Hosts; Inconclusive
+ Effects on Throughput
+\end_layout
+
+\begin_layout Standard
+Based on the results, Juggler had a negative effect on flow completion time
+ as well as goodput for a silent network with query and short flows, as
+ well as for a noisy network for short flows.
+ The increase in false retransmissions may be attributed to Juggler where
+ at times, it may have incorrectly bundled MPTCP packets as if they were
+ TCP packets, as MPTCP was built on top of TCP 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ford2013tcp"
+
+\end_inset
+
+, with its own separate system of determining the order of packets.
+ This may also explain the inconclusive results for throughput.
+ Results were mixed, with Juggler increasing throughput for short flows
+ (on both silent and noisy networks), but failing to increase throughput
+ for query flows on a silent network and long flows on a noisy network.
+\end_layout
+
+\begin_layout Subsection
+Packet Spraying Generally Performed Better than ECMP
+\end_layout
+
+\begin_layout Standard
+As for the switch behavior, packet spraying performed better than ECMP in
+ all significant cases.
+ It increased mean network utilization for all test groups compared to ECMP,
+ and it performed mostly better than ECMP for goodput, throughput, and flow
+ completion time tests in a noisy environment.
+ This behavior may be preferred as most datacenter networks are high in
+ network activity.
+\end_layout
+
+\begin_layout Subsection
+Effects of Combining Packet Spraying-based Switches with Reorder-Resilient
+ Hosts
+\end_layout
+
+\begin_layout Standard
+Studying the combined interaction of both switch behavior and reorder-resiliency
+ led to less significant results.
+ Packet spraying without the Juggler modification increased goodput for
+ query flows on a silent network (1.65% greater than ECMP without the Juggler
+ modification), and for short flows on a noisy network (1.38% greater than
+ packet spraying with the Juggler modification).
+ Interestingly, ECMP with the Juggler modification increased goodput for
+ long flows on a silent network (1.01% increase versus packet spraying with
+ the Juggler modification).
+ Packet spraying with the Juggler modification, on the other hand, increased
+ throughput for long flows on a silent network (4.27% increase versus ECMP
+ without the Juggler modification), and short flows on a noisy network (21.84%
+ increase versus ECMP with the Juggler modification).
+\end_layout
+
+\begin_layout Standard
+Packet spraying without the Juggler modification decreased the flow completion
+ time for query flows on a silent network (1.70% decrease versus ECMP without
+ the Juggler modification), and short flows on a noisy network (1.86% decrease
+ versus ECMP without the Juggler modification).
+ In addition, it also increased the mean network utilization for long flows
+ on a silent network (0.15% increase versus packet spraying with the Juggler
+ modification).
+\end_layout
+
+\begin_layout Standard
+By visually comparing the results, ignoring all measures of statistical
+ significance, it can be seen that that a noisy network with packet spraying
+ and the Juggler modification provided a more desired performance in all
+ four metrics (througput, goodput, flow completion time, and mean network
+ utilization).
+ Packet spraying and the Juggler modification also improved the mean network
+ utilization in all cases.
+ On the other hand, if flow completion time were to be prioritized (where
+ the majority of the flows can be classified as query flows or short flows),
+ the network may be better off without the Juggler modification.
+\end_layout
+
+\begin_layout Section
+Conclusion and Recommendations
+\end_layout
+
+\begin_layout Standard
+Based on preliminary tests, MPTCP increased throughput significantly compared
+ to TCP, especially whenusing multiple paths.
+ However, the connection establishment overhead needed to create multiple
+ subflows penalized the speed at which flows are created and consequently
+ completed.
+\end_layout
+
+\begin_layout Standard
+In addition, the paper promised to experimentally prove that ECMP-based
+ switches causes hotspots in the network.
+ As a basis for comparison, two network traffic conditions designed to mimic
+ both the best case (silent network) and worst case (noisy network) scenarios
+ were used.
+ By comparing the throughput and goodput of ECMP-based switches without
+ reordering resiliency, it can be seen that that there were no improvements
+ to the hotspots in the network.
+ However, hotspots in the network may be a consequence of the experiment
+ setup.
+ This could either be attributed to the amount of traffic in the noisy network
+ or due to the limited bandwidth at the single interface of the host for
+ both network setups.
+\end_layout
+
+\begin_layout Standard
+It was also found that packet spraying generally improved all four metrics
+ (throughput, goodput, flow completion time, and mean network utilization)
+ for a noisy environment.
+ However, inspecting the effects of the GRO layer modification (Juggler)
+ had mixed results.
+ Comparisons including the combined effects of both the switch behavior
+ and Juggler turned out with less statistically significant results, however
+ when this is ignored, packet spraying and Juggler-modified hosts provided
+ a more desired performance in all metrics (goodput, throughput, flow completion
+ time, and mean network utilization) for noisy networks.
+ Considering that most datacenters will, more often than not, operate with
+ a lot of concurrent flows in the network, packet spraying (tied with the
+ GRO layer modification) may be beneficial.
+\end_layout
+
+\begin_layout Subsection
+Recommendations and Future Work
+\end_layout
+
+\begin_layout Standard
+Further analysis may be done on TCP combined with packet spraying and reorder
+ resilient hosts.
+ According to initial testing, TCP with reorder resilient hosts and packet
+ spraying showed an increase in throughput and goodput.
+ This may be promising as there would be no need to implement a new transport
+ protocol in the network.
+\end_layout
+
+\begin_layout Standard
+As for MPTCP, the other path managers can be used and tweaked to gain more
+ insights as to how the total number of subflows would affect the performance
+ of the different flow types.
+ Specifically, an investigation can be done analyzing if incrementing/reducing
+ subflows would affect network performance.
+ The addition of a flow type classifier as well as an automatic knob on
+ the number of subflows can potentially help grow MPTCP as a protocol.
+\end_layout
+
+\begin_layout Standard
+Further tests can also be done studying network topologies other than fat
+ tree, as used in this study.
+ Fat tree is commonly preferred due to its cheap and scalable nature, but
+ the fact that each end-host is connected to the rest of the network through
+ only one interface causes a significant bottleneck, limiting the benefits
+ of the network's supposed path diversity.
+ It is also possible that different results may arise from having a larger
+ fat tree (
+\begin_inset Formula $K>4$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Juggler, the modification to the Generic Receive Offload (GRO) layer, can
+ also be investigated further, specifically with its effects on both TCP
+ and MPTCP.
+ Since Juggler has not been maintained for quite a while now, its kernel
+ modifications may have been completely overwritten, skipped, or negated
+ by updated kernel patches.
+\end_layout
+
+\begin_layout Standard
+Network hotspots may also be studied further by creating a special testbed
+ specifically built to measure the amount of traffic going through specific
+ nodes in the network.
+ In some cases (like in a different network topology), packet spraying may
+ still improve network hotspots caused by ECMP.
+\end_layout
+
+\begin_layout Standard
+Lastly, data collected in a datacenter network with real traffic would be
+ beneficial for the validity of the tests since the simulated traffic in
+ this experiment was merely an approximation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Remember though that your final submission is supposed to have all the bibliogra
+phy entries embedded in the \SpecialChar LaTeX
+-file.
+ This means you eventually have to copy the .bbl file into the latex file
+ and remove the bibtex lines.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "IEEEabrv,IEEEexample,Proposal_Part1"
+options "IEEEtran"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Biography
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "1in"
+special "none"
+height "1.25in"
+height_special "none"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+Replace this box by an image with a width of 1
+\begin_inset space \thinspace{}
+\end_inset
+
+in and a height of 1.25
+\begin_inset space \thinspace{}
+\end_inset
+
+in!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Your Name
+\end_layout
+
+\end_inset
+
+ All about you and the what your interests are.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Biography without photo
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Coauthor
+\end_layout
+
+\end_inset
+
+Same again for the co-author, but without photo
+\end_layout
+
+\end_body
+\end_document
